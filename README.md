@@ -24,5 +24,6 @@ After scraping all data, the cryptocurrencies analyzed (bitcoin, litecoin, & eth
 
 # CryptoVolume: Soon to come
 - Full volume data
-- Off_by as parameter of twint_scrape.py to make more user friendly
-- If a scrape returns 0, force a retry as this is most likely due to a server issue.
+- Off_by as parameter of twint_scrape.py to make more user friendly *Completed - Off_by file is more or less useless now*
+- If a scrape returns 0, force a retry as this is most likely due to a server issue. *Completed - Provide option to force retry blindly or request user input*
+- Encountered issue when date was in a form that required modification to terminated file. Working on a fix.
