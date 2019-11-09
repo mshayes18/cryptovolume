@@ -2,7 +2,7 @@ import twint
 from twint import run
 import datetime
 
-def scrape(start, finish, keyword):
+def scrape(start, finish, keyword, off_by = 0):
     ''' Given a start/finish datetime instance and keyword(s) to scrape for,
     search and return a dictionary with first key as start date '''
     # Initialize twint configuration
@@ -13,16 +13,15 @@ def scrape(start, finish, keyword):
     c.Retries_count = 100
     c.Count = True #To ensure running
 
-    # Dictionary to be returned
+    # Dictionary to be returned / Not fully necessary & can remove i also
     daily = {}
     # Key counter, i = 0 is start date
     i = 0
-    num_per_day = 0
+    num_per_day = off_by
     # timedelta value
     time_span = finish - start
     # Increment by a timedelta value of 10 minutes
-    time_add = 10
-    incr = start + datetime.timedelta(minutes = time_add)
+    incr = start + datetime.timedelta(minutes = 10)
 
     # Create file write num_per_day for each day in file and name by start date
     # Use second file to keep track of parameters if terminated early
@@ -41,6 +40,17 @@ def scrape(start, finish, keyword):
         # Store tweets in a variable, keep track of number of tweets
         tweets = twint.storage.panda.Tweets_df
         num_per_day += len(tweets)
+
+        # If no tweets were returned, try the same search again
+        if len(tweets) == 0:
+            # try_again = input('Potential server error, retry? (y/n): ')
+            try_again = 'y' # For mindless running
+            print('Potential server error, trying again') # For mindless running
+            if try_again == 'y':
+                continue
+            else:
+                print('Connection error')
+                break
         
         # If hour & min = 0, day has changed. Thus, reset num_per_day vals
         # and increment key counter
@@ -64,7 +74,7 @@ def scrape(start, finish, keyword):
         time_span = time_span - datetime.timedelta(minutes = 10)
         start = incr
         # print(start) # Can comment out
-        incr = incr + datetime.timedelta(minutes = time_add)
+        incr = incr + datetime.timedelta(minutes = 10)
         # print(incr) # Can comment out
         
     file.write(str(num_per_day) + '\n')
