@@ -2,7 +2,7 @@ import twint
 from twint import run
 import datetime
 
-def scrape(start, finish, keyword, off_by = 0):
+def scrape(start, finish, keyword, file_start = '', off_by = 0):
     ''' Given a start/finish datetime instance and keyword(s) to scrape for,
     search and return a dictionary with first key as start date '''
     # Initialize twint configuration
@@ -13,11 +13,12 @@ def scrape(start, finish, keyword, off_by = 0):
     c.Retries_count = 100
     c.Count = True #To ensure running
 
-    # Dictionary to be returned / Not fully necessary & can remove i also
-    daily = {}
-    # Key counter, i = 0 is start date
-    i = 0
+    # Filename equals start time if this is first time scraping
+    if file_start == '':
+        file_start = start
+    # If script killed mid-day, num_per_day is non-zero
     num_per_day = off_by
+    
     # timedelta value
     time_span = finish - start
     # Increment by a timedelta value of 10 minutes
@@ -25,7 +26,7 @@ def scrape(start, finish, keyword, off_by = 0):
 
     # Create file write num_per_day for each day in file and name by start date
     # Use second file to keep track of parameters if terminated early
-    filename = str(keyword) + '_' + str(start)[:10] + '.txt'
+    filename = str(keyword) + '_' + str(file_start)[:10] + '.txt'
     file = open(filename, 'a')
     
     # Increment start/finish dates until the end date is reached
@@ -55,12 +56,10 @@ def scrape(start, finish, keyword, off_by = 0):
         # If hour & min = 0, day has changed. Thus, reset num_per_day vals
         # and increment key counter
         if incr.hour == 0 and incr.minute == 0:
-            file.write(str(num_per_day) + '\n')
+            file.write(str(num_per_day) + '   ' + str(start)[:10] + '\n')
             file.close
             file = open(filename, 'a')
-            daily[i] = num_per_day
             num_per_day = 0
-            i += 1
 
         # After a search has been conducted, keep track of where to pick up
         # again if terminated early.
@@ -77,16 +76,15 @@ def scrape(start, finish, keyword, off_by = 0):
         incr = incr + datetime.timedelta(minutes = 10)
         # print(incr) # Can comment out
         
-    file.write(str(num_per_day) + '\n')
+    file.write(str(num_per_day) + '   ' + str(start)[:10] + '\n')
     file.close
     
     # If the loop terminated early, append if not in dictionary
     if num_per_day not in daily:
-        daily[i] = num_per_day
         file = open(filename, 'a')
-        file.write(str(num_per_day) + '\n')
+        file.write(str(num_per_day) + '   ' + str(start)[:10] + '\n')
         file.close
-    return daily
+    return True
 
 # Sources/Libraries
 ''' https://docs.python.org/3/library/datetime.html#examples-of-usage-timedelta
