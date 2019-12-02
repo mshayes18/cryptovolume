@@ -21,8 +21,8 @@ def scrape(start, finish, keyword, file_start = '', off_by = 0):
     
     # timedelta value
     time_span = finish - start
-    # Increment by a timedelta value of 10 minutes
-    incr = start + datetime.timedelta(minutes = 10)
+    # Increment by a timedelta value of 1 hour
+    incr = start + datetime.timedelta(hours = 1)
 
     # Create file write num_per_day for each day in file and name by start date
     # Use second file to keep track of parameters if terminated early
@@ -34,7 +34,7 @@ def scrape(start, finish, keyword, file_start = '', off_by = 0):
         # Use new start, incr values to search
         start_new = str(start)
         incr_new = str(incr)
-        # print(start_new, incr_new) # Can comment out
+        print("currently at", start_new, "to" incr_new)
         c.Since = start_new
         c.Until = incr_new
         twint.run.Search(c)
@@ -44,9 +44,9 @@ def scrape(start, finish, keyword, file_start = '', off_by = 0):
 
         # If no tweets were returned, try the same search again
         if len(tweets) == 0:
-            # try_again = input('Potential server error, retry? (y/n): ')
-            try_again = 'y' # For mindless running
-            print('Potential server error, trying again') # For mindless running
+            try_again = input('Potential server error, retry? (y/n): ')
+            # try_again = 'y' # For mindless running
+            # print('Potential server error, trying again') # For mindless running
             if try_again == 'y':
                 continue
             else:
@@ -70,20 +70,15 @@ def scrape(start, finish, keyword, file_start = '', off_by = 0):
         file2.close
             
         # decrease time discrepancy and increment start, incr
-        time_span = time_span - datetime.timedelta(minutes = 10)
+        time_span = time_span - datetime.timedelta(hours = 1)
         start = incr
         # print(start) # Can comment out
-        incr = incr + datetime.timedelta(minutes = 10)
+        incr = incr + datetime.timedelta(hours = 1)
         # print(incr) # Can comment out
         
     file.write(str(num_per_day) + '   ' + str(start)[:10] + '\n')
     file.close
     
-    # If the loop terminated early, append if not in dictionary
-    if num_per_day not in daily:
-        file = open(filename, 'a')
-        file.write(str(num_per_day) + '   ' + str(start)[:10] + '\n')
-        file.close
     return True
 
 # Sources/Libraries
