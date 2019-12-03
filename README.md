@@ -84,4 +84,14 @@ Instead, I chose to create a model on the basis that there are 4 possible situat
 Thus, after seeing the graph, the conclusion that the model is risk adverse can be made. This further strengthens the proof of concept that tweet count can be used to predict the pricing of cryptocurrencies. The negative dips are minimal, and most likely due to inaccurate predictions of the oscillating price.
 
 # CryptoVolume: Improvements
-*Soon to come*
+Although the results are promising, there are various areas for improvement that will be added to this repository and are listed below.
+• Additional scraped data for a given cryptocurrency, especially late 2018 for Bitcoin, where it spiked to roughly $18,000. Given the current state of scraping, this would be extremely time costly as there are upwards of 100,000 tweets per day mentioning the cryptocurrency. As a result, access to Twitter's enterprise API or a better method for scraping would be a strong improvement as well.
+• Analysis of additional cryptocurrencies, especially those that are lesser known, but not 'penny stocks'. (Ethereum, Litecoin, etc.) With these cryptocurrencies, the idea is that their Twitter volume may be entirely based on traders. As a result, the predictions may be more accurate and impactful news may be even more infrequent.
+• Indications of pump and dumps. The assumption is that stocks, in general, are based on a few main factors: previous pricing, general sentiment, news reports, and larger companies pumping and dumping, which essentially forces the market to behave in a certain way. Contrarily, cryptocurrencies lack the significant impact of news reports on the price. The model has access to previous pricing and general sentiment and thus, an indicator that a market movement is artificial could significantly improve the performance of the model. However, this is most likely far more difficult to predict.
+• Representing the error better, preventing bias from favoring the model. I would love to research a more statistically sound analysis for interpretting the error.
+
+These are simply ideas that I'd love to test, but the possibility of testing some may be far too difficult. However, this is still a work in progress that I hope to improve. If you have any suggestions or would like to discuss this research, please contact me at mhayes18@bu.edu.
+
+You can also find me on [LinkedIn](https://www.linkedin.com/in/myleshayes/)
+
+Thank you for reading!!
